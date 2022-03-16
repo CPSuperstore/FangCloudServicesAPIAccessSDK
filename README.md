@@ -5,7 +5,7 @@ Support for more endpoints is coming soon.
 
 ## Installation
 ```shell
-pip install FCSAPIAccess 
+pip install FCSAPIAccessSDK
 ```
 
 ## Usage
