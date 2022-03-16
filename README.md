@@ -4,7 +4,6 @@ The SDK for accessing FangCloudServices with API Access Credentials
 Support for more endpoints is coming soon.
 
 ## Installation
-**NOTE**: this is not set up yet. For now, simply download the Python package.
 ```shell
 pip install FCSAPIAccess 
 ```
