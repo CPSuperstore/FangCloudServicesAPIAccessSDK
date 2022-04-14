@@ -11,7 +11,7 @@ pip install FCSAPIAccessSDK
 ## Usage
 Credentials are obtained from the web portal via `Project > API Access`. You must be an admin user in order to access this page.
 
-Do not forget to enable the scopes in hte web portal before attempting authentication.
+Do not forget to enable the scopes in the web portal before attempting authentication.
 ```python
 from FCSAPIAccess import FCSAPIAccess, Scope
 
