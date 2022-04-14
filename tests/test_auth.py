@@ -25,7 +25,8 @@ class TestCaseComparisons(unittest.TestCase):
 
         access.set_access_token(credentials["expired_access"], credentials["expired_refresh"])
         self.assertNotEqual(
-            access.list_directories(), {'error': 'expired_code', 'error_description': 'The provided code is expired.'}
+            access.project.list_directories(),
+            {'error': 'expired_code', 'error_description': 'The provided code is expired.'}
         )
 
     def test_incorrect_credentials(self):

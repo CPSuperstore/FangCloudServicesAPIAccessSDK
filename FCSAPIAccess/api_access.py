@@ -2,12 +2,17 @@ import typing
 
 import requests
 
-import FCSAPIAccess.sdk as sdk
 import FCSAPIAccess.scope as scopes
 import FCSAPIAccess.exceptions as exceptions
 
+import FCSAPIAccess.fcs_monitoring as fcs_monitoring
+import FCSAPIAccess.fcs_notification as fcs_notification
+import FCSAPIAccess.fcs_project as fcs_project
 
-class FCSAPIAccess(sdk.FangCloudServicesAPI):
+
+class FCSAPIAccess:
+    url_base = "https://fangcloudservices.pythonanywhere.com/api/v1"
+
     def __init__(
             self, client_id: str, client_secret: str, scope: typing.Union[typing.List[scopes.Scope], scopes.Scope]
     ):
@@ -20,7 +25,18 @@ class FCSAPIAccess(sdk.FangCloudServicesAPI):
 
         self._access_token, self._refresh_token = self.client_credentials()
 
-        super().__init__(self._access_token)
+        self.monitoring = fcs_monitoring.FangMonitoringServices(self._access_token)
+        self.notification = fcs_notification.FangNotificationServices(self._access_token)
+        self.project = fcs_project.FangCloudServicesAPI(self._access_token)
+
+        self._composite_objects = [
+            self.monitoring,
+            self.notification,
+            self.project
+        ]
+
+        for o in self._composite_objects:
+            o._status_check = self._check_status
 
     def client_credentials(self) -> typing.Tuple[str, str]:
         r = requests.post(self.url_base + "/project/oauth2", json={
@@ -59,7 +75,8 @@ class FCSAPIAccess(sdk.FangCloudServicesAPI):
         if refresh_token is not None:
             self._refresh_token = refresh_token
 
-        self.headers = {'Authorization': 'Bearer {}'.format(access_token)}
+        for o in self._composite_objects:
+            o.headers = {'Authorization': 'Bearer {}'.format(access_token)}
 
     def is_approved(self, scope: scopes.Scope):
         return scope in self._scope
@@ -76,4 +93,10 @@ class FCSAPIAccess(sdk.FangCloudServicesAPI):
                     self.set_access_token(*self.refresh_token())
                     return retry()
 
-        return super()._check_status(r, retry)
+        if r.status_code == 500:
+            try:
+                raise exceptions.APIErrorException(r.json()["message"])
+            except KeyError:
+                raise exceptions.APIErrorException(
+                    "An unknown server has occurred. Please contact support for more info"
+                )
