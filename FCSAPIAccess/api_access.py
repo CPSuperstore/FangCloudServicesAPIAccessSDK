@@ -8,6 +8,7 @@ import FCSAPIAccess.exceptions as exceptions
 import FCSAPIAccess.fcs_monitoring as fcs_monitoring
 import FCSAPIAccess.fcs_notification as fcs_notification
 import FCSAPIAccess.fcs_project as fcs_project
+import FCSAPIAccess.fcs_translation as fcs_translation
 
 
 class FCSAPIAccess:
@@ -28,11 +29,13 @@ class FCSAPIAccess:
         self.monitoring = fcs_monitoring.FangMonitoringServices(self._access_token)
         self.notification = fcs_notification.FangNotificationServices(self._access_token)
         self.project = fcs_project.FangCloudServicesAPI(self._access_token)
+        self.translation = fcs_translation.FangTranslationServices(self._access_token)
 
         self._composite_objects = [
             self.monitoring,
             self.notification,
-            self.project
+            self.project,
+            self.translation
         ]
 
         for o in self._composite_objects:

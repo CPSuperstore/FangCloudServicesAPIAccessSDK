@@ -50,3 +50,8 @@ class Scope(enum.Enum):
     NOTIFICATION_VIEW_STATISTICS = "notification:view:statistics"
     PROJECT_VIEW_RECIPIENT = "project:view:recipient"
     PROJECT_UPDATE_RECIPIENT = "project:update:recipient"
+    TRANSLATION_ENQUEUE_TRANSLATION = "translation:enqueue:translation"
+    TRANSLATION_POLL_TRANSLATION = "translation:poll:translation"
+    TRANSLATION_DOWNLOAD_TRANSLATION = "translation:download:translation"
+    TRANSLATION_VIEW_LANGUAGES = "translation:view:languages"
+    TRANSLATION_VIEW_FORMAT = "translation:view:format"
