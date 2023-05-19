@@ -29,6 +29,90 @@ class FangCloudServicesAPI:
     def _url_encode(self, text: str) -> str:
         return urllib.parse.quote_plus(str(text))
     
+    def get_all_email_addresses(self, user) -> dict:
+        """
+        Retrieves the email addresses linked to a specified user.
+        :param user: The ID of the user
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "GET", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?user={}".format(self._url_encode(user)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.get_all_email_addresses(**local_vars))
+        
+    def create_email_address(self, user, email) -> dict:
+        """
+        Links the specified email address to the specified user.
+        
+        This will cause the confirmation email to be sent to the new email address.
+        :param user:
+        :param email:
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        headers["Content-Type"] = "application/json"
+        r = requests.request(
+            "POST", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email", 
+            headers=headers,
+            json={
+                "email": email,
+                "user": user
+            }
+        )
+        
+        return self._check_status(r, lambda: self.create_email_address(**local_vars))
+        
+    def update_email_address(self, id, user, email) -> dict:
+        """
+        Updates a user's existing email address
+        :param id: The ID of the email address
+        :param user:
+        :param email:
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        headers["Content-Type"] = "application/json"
+        r = requests.request(
+            "PUT", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?id={}".format(self._url_encode(id)), 
+            headers=headers,
+            json={
+                "email": email,
+                "user": user
+            }
+        )
+        
+        return self._check_status(r, lambda: self.update_email_address(**local_vars))
+        
+    def remove_email_address(self, id, user) -> dict:
+        """
+        
+        :param id: The ID of the email address to remove
+        :param user: The ID of the user ascociated with the email address
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "DELETE", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?id={}&user={}".format(self._url_encode(id), self._url_encode(user)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.remove_email_address(**local_vars))
+        
     def validate_token(self, token, minified) -> dict:
         """
         Takes the specified access token which is provided by your API client, and returns the data related to the user's account.
@@ -197,6 +281,47 @@ class FangCloudServicesAPI:
         
         return self._check_status(r, lambda: self.get_user(**local_vars))
         
+    def create_user(self, data, username, email, user_role, password, mailing_lists, dob, favourite_color) -> dict:
+        """
+        StartFragment
+        
+        Sets the properties of a new user.
+        
+        If the requested `user_role` or `mailing_list` IDs do not correspond to an existing user role or mailing list, you will receive a 404 error and the update will not be made.
+        
+        Note that `dob` and `favorite_color` are cusom user fields specific to this project. Use your own fields in their place if you have specified any.
+        :param data:
+        :param username:
+        :param email:
+        :param user_role:
+        :param password:
+        :param mailing_lists:
+        :param dob:
+        :param favourite_color:
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        headers["Content-Type"] = "application/json"
+        r = requests.request(
+            "POST", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/user", 
+            headers=headers,
+            json={
+                "data": data,
+                "dob": dob,
+                "email": email,
+                "favourite_color": favourite_color,
+                "mailing_lists": mailing_lists,
+                "password": password,
+                "user_role": user_role,
+                "username": username
+            }
+        )
+        
+        return self._check_status(r, lambda: self.create_user(**local_vars))
+        
     def update_user(self, id, data, username, primary_email, user_role, active) -> dict:
         """
         Updates the properties of the specified user. Note that sending up the `data` JSON blob will overwrite the existing data so be sure to merge the data before sending.
@@ -233,10 +358,9 @@ class FangCloudServicesAPI:
         
         return self._check_status(r, lambda: self.update_user(**local_vars))
         
-    def get_all_email_addresses(self, user) -> dict:
+    def get_all_email_categories(self) -> dict:
         """
-        Retrieves the email addresses linked to a specified user.
-        :param user: The ID of the user
+        
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -244,19 +368,16 @@ class FangCloudServicesAPI:
         headers = self.headers.copy()
         r = requests.request(
             "GET", 
-            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?user={}".format(self._url_encode(user)), 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email_category", 
             headers=headers
         )
         
-        return self._check_status(r, lambda: self.get_all_email_addresses(**local_vars))
+        return self._check_status(r, lambda: self.get_all_email_categories(**local_vars))
         
-    def create_email_address(self, user, email) -> dict:
+    def create_email_category(self, name) -> dict:
         """
-        Links the specified email address to the specified user.
         
-        This will cause the confirmation email to be sent to the new email address.
-        :param user:
-        :param email:
+        :param name:
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -265,22 +386,20 @@ class FangCloudServicesAPI:
         headers["Content-Type"] = "application/json"
         r = requests.request(
             "POST", 
-            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email_category", 
             headers=headers,
             json={
-                "email": email,
-                "user": user
+                "name": name
             }
         )
         
-        return self._check_status(r, lambda: self.create_email_address(**local_vars))
+        return self._check_status(r, lambda: self.create_email_category(**local_vars))
         
-    def update_email_address(self, id, user, email) -> dict:
+    def update_email_category(self, id, name) -> dict:
         """
-        Updates a user's existing email address
-        :param id: The ID of the email address
-        :param user:
-        :param email:
+        
+        :param id: 
+        :param name:
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -289,21 +408,19 @@ class FangCloudServicesAPI:
         headers["Content-Type"] = "application/json"
         r = requests.request(
             "PUT", 
-            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?id={}".format(self._url_encode(id)), 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email_category?id={}".format(self._url_encode(id)), 
             headers=headers,
             json={
-                "email": email,
-                "user": user
+                "name": name
             }
         )
         
-        return self._check_status(r, lambda: self.update_email_address(**local_vars))
+        return self._check_status(r, lambda: self.update_email_category(**local_vars))
         
-    def remove_email_address(self, id, user) -> dict:
+    def remove_email_category(self, id) -> dict:
         """
         
-        :param id: The ID of the email address to remove
-        :param user: The ID of the user ascociated with the email address
+        :param id: 
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -311,11 +428,115 @@ class FangCloudServicesAPI:
         headers = self.headers.copy()
         r = requests.request(
             "DELETE", 
-            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email?id={}&user={}".format(self._url_encode(id), self._url_encode(user)), 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/email_category?id={}".format(self._url_encode(id)), 
             headers=headers
         )
         
-        return self._check_status(r, lambda: self.remove_email_address(**local_vars))
+        return self._check_status(r, lambda: self.remove_email_category(**local_vars))
+        
+    def get_email_addresses_subscribed_to_a_category(self, category) -> dict:
+        """
+        
+        :param category: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "GET", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?category={}".format(self._url_encode(category)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.get_email_addresses_subscribed_to_a_category(**local_vars))
+        
+    def get_categories_subscribed_to_by_an_email_address(self, email) -> dict:
+        """
+        
+        :param email: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "GET", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?email={}".format(self._url_encode(email)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.get_categories_subscribed_to_by_an_email_address(**local_vars))
+        
+    def subscribe_to_category(self, email, category) -> dict:
+        """
+        
+        :param email: 
+        :param category: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "POST", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?email={}&category={}".format(self._url_encode(email), self._url_encode(category)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.subscribe_to_category(**local_vars))
+        
+    def subscribe_to_all_categories(self, email) -> dict:
+        """
+        
+        :param email: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "POST", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?email={}".format(self._url_encode(email)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.subscribe_to_all_categories(**local_vars))
+        
+    def remove_subscription_from_category(self, email, category) -> dict:
+        """
+        
+        :param email: 
+        :param category: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "DELETE", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?email={}&category={}".format(self._url_encode(email), self._url_encode(category)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.remove_subscription_from_category(**local_vars))
+        
+    def remove_subscription_from_all_categories(self, email) -> dict:
+        """
+        
+        :param email: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "DELETE", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/mailing_list?email={}".format(self._url_encode(email)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.remove_subscription_from_all_categories(**local_vars))
         
     def get_external_accounts(self) -> dict:
         """
@@ -460,7 +681,7 @@ class FangCloudServicesAPI:
         
         return self._check_status(r, lambda: self.get_settings(**local_vars))
         
-    def change_settings(self, id, default_data, default_user_role, name, privacy_policy, terms_of_service, ignore_expired_tokens, access_token_prefix) -> dict:
+    def change_settings(self, id, default_data, default_user_role, name, privacy_policy, terms_of_service, ignore_expired_tokens, access_token_prefix, enable_password_login, alert_channel, allow_registration) -> dict:
         """
         Changes your project settings
         :param id: 
@@ -471,6 +692,9 @@ class FangCloudServicesAPI:
         :param terms_of_service:
         :param ignore_expired_tokens:
         :param access_token_prefix:
+        :param enable_password_login:
+        :param alert_channel:
+        :param allow_registration:
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -483,8 +707,11 @@ class FangCloudServicesAPI:
             headers=headers,
             json={
                 "access_token_prefix": access_token_prefix,
+                "alert_channel": alert_channel,
+                "allow_registration": allow_registration,
                 "default_data": default_data,
                 "default_user_role": default_user_role,
+                "enable_password_login": enable_password_login,
                 "ignore_expired_tokens": ignore_expired_tokens,
                 "name": name,
                 "privacy_policy": privacy_policy,
@@ -1102,6 +1329,104 @@ class FangCloudServicesAPI:
         )
         
         return self._check_status(r, lambda: self.remove_scope(**local_vars))
+        
+    def get_sessions(self, id) -> dict:
+        """
+        Retrieves a list of active sessions for a specified application
+        :param id: The ID of the application
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "GET", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/api/session?id={}".format(self._url_encode(id)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.get_sessions(**local_vars))
+        
+    def expire_session(self, id, session) -> dict:
+        """
+        Expires the specified session. It can be refreshed via the refresh token flow.
+        
+        Note that it is possible to expire the session you are currently using for API Access. Doing so will cause the token to expire, but it can be refreshed.
+        :param id: The ID of the application
+        :param session: The ID of the session to expire
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "PUT", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/api/session?id={}&session={}".format(self._url_encode(id), self._url_encode(session)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.expire_session(**local_vars))
+        
+    def refresh_token(self, id, session) -> dict:
+        """
+        Refreshes the specified session and returns the new access and refresh tokens.
+        :param id: The ID of the application
+        :param session: The ID of the session to refresh
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "PATCH", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/api/session?id={}&session={}".format(self._url_encode(id), self._url_encode(session)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.refresh_token(**local_vars))
+        
+    def remove_session(self, id, session) -> dict:
+        """
+        Revokes an active sessions for a specified application.
+        
+        Note that it is possible to revoke the session you are currently using for API Access. Doing so will cause the token to expire and it can not be refreshed.
+        
+        This action can not be undone.
+        :param id: The ID of the application
+        :param session: The ID of the session to revoke
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "DELETE", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/api/session?id={}&session={}".format(self._url_encode(id), self._url_encode(session)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.remove_session(**local_vars))
+        
+    def remove_all_sessions(self, id) -> dict:
+        """
+        Revokes an active sessions for a specified application.
+        
+        Note that it is possible to revoke the session you are currently using for API Access. Doing so will cause the token to expire and it can not be refreshed.
+        
+        This action can not be undone.
+        :param id: The ID of the application
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "DELETE", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/api/session?id={}".format(self._url_encode(id)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.remove_all_sessions(**local_vars))
         
     def get_tokens(self) -> dict:
         """

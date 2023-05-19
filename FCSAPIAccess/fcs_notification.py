@@ -36,6 +36,8 @@ class FangNotificationServices:
     def get_channels(self) -> dict:
         """
         Retrieves a list of existing channels
+        
+        **Requires Scope**: `notification:view:channel`
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -52,6 +54,8 @@ class FangNotificationServices:
     def create_channel(self, name) -> dict:
         """
         Creates a new channel
+        
+        **Requires Scope**: `notification:update:channel`
         :param name:
         """
         local_vars = locals()
@@ -73,6 +77,8 @@ class FangNotificationServices:
     def update_channel(self, id, name) -> dict:
         """
         Updates the channel information
+        
+        **Requires Scope**: `notification:update:channel`
         :param id: 
         :param name:
         """
@@ -95,6 +101,8 @@ class FangNotificationServices:
     def remove_channel(self, id) -> dict:
         """
         Deletes a channel and all of its history
+        
+        **Requires Scope**: `notification:update:channel`
         :param id: 
         """
         local_vars = locals()
@@ -112,6 +120,8 @@ class FangNotificationServices:
     def get_recipients(self, channel) -> dict:
         """
         Returns all of the recipients which have been added to a channel
+        
+        **Requires Scope**: `notification:view:channel_recipient`
         :param channel: 
         """
         local_vars = locals()
@@ -129,6 +139,8 @@ class FangNotificationServices:
     def add_recipient(self, channel, recipient) -> dict:
         """
         Adds the specified recipient to the specified channel
+        
+        **Requires Scope**: `notification:update:channel_recipient`
         :param channel: 
         :param recipient:
         """
@@ -151,6 +163,8 @@ class FangNotificationServices:
     def remove_recipient(self, channel, recipient) -> dict:
         """
         Removes the specified recipient from the specified channel
+        
+        **Requires Scope**: `notification:update:channel_recipient`
         :param channel: 
         :param recipient: 
         """
@@ -171,6 +185,8 @@ class FangNotificationServices:
         Pulls the queued messages. Note that once a message is pulled, you will not be able to pull it again from this endpoint.
         
         Services authenticated using the same `client_id` and `client_secret` are considered the same application, and so pulling a message from one instance of an app will prevent other apps authenticated with the same credentials from being able to pull that message.
+        
+        **Requires Scope**: `notification:pull:message`
         :param channel: 
         """
         local_vars = locals()
@@ -187,7 +203,9 @@ class FangNotificationServices:
         
     def push_message(self, channel, name, body) -> dict:
         """
-        Pushes a new message to the queue. In the JSON you may specify `name`, `body` or `code`. All 3 are optional.
+        Pushes a new message to the queue. In the JSON you may specify `name`, `body` or `code`. All 3 are optional. This does, however, mean that you can push empty messages.
+        
+        **Requires Scope**: `notification:push:message`
         :param channel: 
         :param name:
         :param body:
@@ -216,6 +234,8 @@ class FangNotificationServices:
         Messages can only be seen for up to 24 hours.
         
         Note that if the `sender` is `null`, the message was either system generated, or sent through the message sender.
+        
+        **Requires Scope**: `notification:view:history`
         :param channel: The ID of the channel to pull message history from
         """
         local_vars = locals()

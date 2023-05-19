@@ -114,3 +114,47 @@ class FangTranslationServices:
         
         return self._check_status(r, lambda: self.get_formats(**local_vars))
         
+    def extract_text(self, format) -> dict:
+        """
+        Converts the provided document to a JSON translation file which is compatable with the translator. The contents of the document are sent as the body of the request.
+        
+        **Note**: While we do our best to create descriptive keys, to reference the translations, the system is by no means perfect. Key names may be very bulky/bloated and some text may be missed. We strongly advise a manual review of the file before using it anywhere else.
+        
+        Supported input file formats:
+        
+        - HTML
+            
+        
+        _More coming soon_
+        :param format: The format of the input document
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "POST", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/translation/extract?format={}".format(self._url_encode(format)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.extract_text(**local_vars))
+        
+    def generate_library(self, language) -> dict:
+        """
+        Generates a new file from the provided JSON translation file which can be imported into your project to make translation management easier.
+        
+        Please refer to the _Library Generator_ page under _Translations_ when logged into your account for information on each library.
+        
+        Supported languages:
+        
+        - JavaScript
+            
+        
+        _More coming soon_
+        :param language: The language to generate the library for
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        raise NotImplementedError('The requested endpoint is not ready for use')

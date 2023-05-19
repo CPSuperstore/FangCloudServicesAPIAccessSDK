@@ -38,6 +38,8 @@ class FangMonitoringServices:
     def get_urls(self) -> dict:
         """
         This endpoint retrieves the URLs you are monitoring
+        
+        **Requires Scope**: `monitor:view:url`
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -56,6 +58,8 @@ class FangMonitoringServices:
         Adds a new URL to your list of URLs being monitored
         
         `notification_channel` is the ID of the channel where change notifications will automatically be sent. This is part of Notification services.
+        
+        **Requires Scope**: `monitor:update:url`
         :param name:
         :param url:
         :param interval:
@@ -85,6 +89,8 @@ class FangMonitoringServices:
         Updates the data related to the specified URL
         
         `notification_channel` is the ID of the channel where change notifications will automatically be sent. This is part of Notification services.
+        
+        **Requires Scope**: `monitor:update:url`
         :param id: 
         :param name:
         :param url:
@@ -115,6 +121,8 @@ class FangMonitoringServices:
         Deletes the specified URL and wipes all of its history.
         
         **WARNING**: This **CAN NOT** be undone!
+        
+        **Requires Scope**: `monitor:update:url`
         :param id: 
         """
         local_vars = locals()
@@ -136,6 +144,8 @@ class FangMonitoringServices:
         Note that the response only contains state changes in chronological order.
         
         It is assumed that each state carries over to the next record. For example, if a state starts at `00:25:26` and the next state begins at `10:25:26`, it is assumed that the URL was in that state for the full 10 hour interval.
+        
+        **Requires Scope**: `monitor:view:state`
         :param id: Optional URL ID to pull the history of a single tracked URL
         """
         local_vars = locals()
