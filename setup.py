@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name='FCSAPIAccessSDK',
-    version='1.1.0',
+    version='1.1.2',
     packages=['FCSAPIAccess'],
     url='https://github.com/CPSuperstore/FangCloudServicesAPIAccessSDK',
     license='Apache License 2.0',

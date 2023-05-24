@@ -751,10 +751,10 @@ class FangCloudServicesAPI:
         
         return self._check_status(r, lambda: self.change_settings(**local_vars))
         
-    def copy_settings(self, from) -> dict:
+    def copy_settings(self, from_id) -> dict:
         """
         
-        :param from: 
+        :param from_id: 
         """
         local_vars = locals()
         if 'self' in local_vars: del local_vars['self']
@@ -762,7 +762,7 @@ class FangCloudServicesAPI:
         headers = self.headers.copy()
         r = requests.request(
             "PUT", 
-            "https://fangcloudservices.pythonanywhere.com/api/v1/project/import?from={}".format(self._url_encode(from)), 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/import?from_id={}".format(self._url_encode(from_id)), 
             headers=headers
         )
         

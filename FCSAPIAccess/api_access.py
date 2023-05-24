@@ -56,7 +56,12 @@ class FCSAPIAccess:
                 )
 
         approved_scope: str = r.json()["scope"]
-        self._scope = [scopes.Scope(s) for s in approved_scope.split(" ")]
+
+        if len(approved_scope) == 0:
+            self._scope = []
+
+        else:
+            self._scope = [scopes.Scope(s) for s in approved_scope.split(" ")]
 
         return r.json()["access_token"], r.json()["refresh_token"]
 
@@ -89,6 +94,9 @@ class FCSAPIAccess:
             "access_token": self._access_token,
             "refresh_token": self._refresh_token
         })
+        if r.status_code == 401:
+            raise exceptions.InvalidCredentialsException(r.json()["error_description"])
+
         return r.json()["access_token"], r.json()["refresh_token"]
 
     def get_scope_string(self) -> str:

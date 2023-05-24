@@ -2,6 +2,10 @@ class InvalidGrantException(Exception):
     pass
 
 
+class InvalidCredentialsException(Exception):
+    pass
+
+
 class ClientError(Exception):
     pass
 

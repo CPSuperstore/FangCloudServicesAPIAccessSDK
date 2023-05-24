@@ -14,7 +14,7 @@ class TestCaseComparisons(unittest.TestCase):
     def test_correct_credentials(self):
         FCSAPIAccess(
             credentials["client_id"], credentials["client_secret"],
-            Scope.FULL_ACCESS
+            []
         )
 
     def test_expired_access_token(self):
