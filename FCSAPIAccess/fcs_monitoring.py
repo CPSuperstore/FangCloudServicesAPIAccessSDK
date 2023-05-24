@@ -30,7 +30,13 @@ class FangMonitoringServices:
     def _check_status(self, r: requests.Response, retry: callable):
         check = self._status_check(r, retry)
         
-        return r.json() if check is None else check
+        if "json" in r.headers['content-type']:
+            result = r.json()
+            
+        else:
+            result = r.text
+        
+        return result if check is None else check
         
     def _url_encode(self, text: str) -> str:
         return urllib.parse.quote_plus(str(text))

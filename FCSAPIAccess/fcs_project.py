@@ -24,7 +24,13 @@ class FangCloudServicesAPI:
     def _check_status(self, r: requests.Response, retry: callable):
         check = self._status_check(r, retry)
         
-        return r.json() if check is None else check
+        if "json" in r.headers['content-type']:
+            result = r.json()
+            
+        else:
+            result = r.text
+        
+        return result if check is None else check
         
     def _url_encode(self, text: str) -> str:
         return urllib.parse.quote_plus(str(text))
@@ -280,6 +286,30 @@ class FangCloudServicesAPI:
         )
         
         return self._check_status(r, lambda: self.get_user(**local_vars))
+        
+    def search_users(self, username, display_name, email, primary_email, password_reset, reset_password_on_login, user_role, active) -> dict:
+        """
+        This endpoint retrieves a single user who has the specified ID.
+        :param username: 
+        :param display_name: 
+        :param email: 
+        :param primary_email: 
+        :param password_reset: 
+        :param reset_password_on_login: 
+        :param user_role: 
+        :param active: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "GET", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/user/search?username={}&display_name={}&email={}&primary_email={}&password_reset={}&reset_password_on_login={}&user_role={}&active={}".format(self._url_encode(username), self._url_encode(display_name), self._url_encode(email), self._url_encode(primary_email), self._url_encode(password_reset), self._url_encode(reset_password_on_login), self._url_encode(user_role), self._url_encode(active)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.search_users(**local_vars))
         
     def create_user(self, data, username, email, user_role, password, mailing_lists, dob, favourite_color) -> dict:
         """
@@ -720,6 +750,23 @@ class FangCloudServicesAPI:
         )
         
         return self._check_status(r, lambda: self.change_settings(**local_vars))
+        
+    def copy_settings(self, from) -> dict:
+        """
+        
+        :param from: 
+        """
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        headers = self.headers.copy()
+        r = requests.request(
+            "PUT", 
+            "https://fangcloudservices.pythonanywhere.com/api/v1/project/import?from={}".format(self._url_encode(from)), 
+            headers=headers
+        )
+        
+        return self._check_status(r, lambda: self.copy_settings(**local_vars))
         
     def get_scopes(self) -> dict:
         """
