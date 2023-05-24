@@ -60,6 +60,28 @@ class FCSAPIAccess:
 
         return r.json()["access_token"], r.json()["refresh_token"]
 
+    def custom_request(
+            self, endpoint: str, method: str, args: dict = None, json: dict = None, additional_headers: dict = None,
+            api_version: str = "v1"
+    ) -> dict:
+
+        local_vars = locals()
+        if 'self' in local_vars: del local_vars['self']
+
+        additional_headers = {} if additional_headers is None else additional_headers
+
+        headers = {'Authorization': 'Bearer {}'.format(self._access_token)}
+        headers.update(additional_headers)
+
+        r = requests.request(
+            method,
+            "https://fangcloudservices.pythonanywhere.com/api/" + api_version + endpoint,
+            headers=headers,
+            params=args, json=json
+        )
+
+        return self._check_status(r, lambda: self.custom_request(**local_vars))
+
     def refresh_token(self) -> typing.Tuple[str, str]:
         r = requests.post(self.url_base + "/project/oauth2", json={
             "grant_type": "refresh_token",
