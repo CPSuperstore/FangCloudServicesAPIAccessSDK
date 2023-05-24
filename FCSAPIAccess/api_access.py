@@ -85,7 +85,15 @@ class FCSAPIAccess:
             params=args, json=json
         )
 
-        return self._check_status(r, lambda: self.custom_request(**local_vars))
+        check = self._check_status(r, lambda: self.custom_request(**local_vars))
+
+        if "json" in r.headers['content-type']:
+            result = r.json()
+
+        else:
+            result = r.text
+
+        return result if check is None else check
 
     def refresh_token(self) -> typing.Tuple[str, str]:
         r = requests.post(self.url_base + "/project/oauth2", json={
