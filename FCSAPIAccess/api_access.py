@@ -97,9 +97,18 @@ class FCSAPIAccess:
                     return retry()
 
         if r.status_code == 500:
-            try:
-                raise exceptions.APIErrorException(r.json()["message"])
-            except KeyError:
-                raise exceptions.APIErrorException(
-                    "An unknown server has occurred. Please contact support for more info"
-                )
+            response = r.json()
+            if "message" in response:
+                raise exceptions.HTTP500InternalServerError(response["message"])
+
+            raise exceptions.HTTP500InternalServerError(
+                "An unknown server has occurred. Please contact support for more info"
+            )
+
+        if r.status_code == 404:
+            raise exceptions.HTTP404NotFound(
+                "The resource or endpoint you have requested either does not exist, "
+                "or you do not have permission to access"
+            )
+
+        exceptions.raise_exception(r.status_code)
